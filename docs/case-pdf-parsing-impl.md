@@ -32,7 +32,7 @@ BGE-M3 嵌入 + 真实 GLM 生成跑出，可复现。
 
 ## 三、如何换成「真实下载的年报 PDF」
 
-等环境恢复（能联网取到 PDF）或你本地已有年报 PDF 时：
+等环境恢复（能联网取到 PDF）或本地已有年报 PDF 时：
 
 1. 把真实 PDF 丢进 `data/reports/raw/`（覆盖或新增，文件名随意）；
 2. 若来源是 .md 也可继续放 `data/reports/` 走 markdown 路线；
