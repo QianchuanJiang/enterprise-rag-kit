@@ -1,0 +1,59 @@
+# 样例 C「信创Edge · 离线私有化」配置 —— Qdrant 生产后端
+# 与 real_pdf.yaml 的唯一差别：collection 独立命名；运行时由
+#   KnowledgeBase(cfg, backend="qdrant")
+# 切换为 Qdrant 生产向量库（持久化、payload 权限过滤、横向扩展）。
+# 解析/嵌入(BGE-M3)/检索(BM25+RRF)/生成(GLM)/拒答阈值 与 A 完全一致，指标可横向对比。
+#
+# 先决：
+#   1) 起 Qdrant 服务 —— docker run -d -p 6333:6333 qdrant/qdrant   （本环境镜像源见说明文档）
+#   2) 生成真实 PDF —— python scripts/make_real_pdfs.py
+# 评测：python scripts/real_c_eval.py
+
+tenant: tenant_c
+data_dir: ./data/reports/raw
+collection: kb_c
+qdrant_url: http://localhost:6333
+
+parser:
+  engine: pymupdf
+  drop_header_footer: true
+  table_mode: kv_pairs
+  min_text_len: 30
+
+chunk:
+  strategy: parent_child
+  child_size: 256
+  parent_size: 768
+  overlap: 32
+  respect_headings: true
+
+retrieval:
+  dense_model: BAAI/bge-m3
+  dense_dim: 1024
+  sparse: true
+  top_k_coarse: 30
+  top_k_final: 8
+  rerank_enabled: true
+  rerank_model: BAAI/bge-reranker-v2-m3
+  query_rewrite: false
+
+guard:
+  require_citation: true
+  # 拒答阈值（真实 PDF 路线数据标定，与 A 一致）：相关 [0.656,0.818] / 无关 [0.365,0.577]，干净分离。
+  refuse_threshold: 0.62
+  max_context_chars: 12000
+  injection_check: true
+
+security:
+  acl_enabled: false
+  default_level: public
+  audit_enabled: true
+  audit_path: ./data/reports/raw/audit_c.jsonl
+
+llm:
+  provider: openai
+  base_url: https://open.bigmodel.cn/api/paas/v4
+  model: glm-4.6v-flash
+  api_key_env: ZHIPU_API_KEY
+  temperature: 0.1
+  max_tokens: 1024

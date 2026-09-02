@@ -1,0 +1,28 @@
+# ---- WorkBuddy 项目数据（不纳入版本库） ----
+.workbuddy/
+**/.workbuddy/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---- 日志 / 审计 ----
+*.log
+*.jsonl
+audit*.jsonl
+
+# ---- Qdrant / Docker 卷（由 Docker 外部管理，不在项目目录） ----
+qdrant_storage/
+
+# ---- 合成年报 PDF：由 scripts/make_real_pdfs.py 重新生成，体积大不纳入版本库 ----
+rag-kit/data/reports/raw/*.pdf
+
+# ---- 评测产物（可复跑生成，不纳入） ----
+rag-kit/data/reports/metrics*.json
+
+# ---- 系统 ----
+.DS_Store

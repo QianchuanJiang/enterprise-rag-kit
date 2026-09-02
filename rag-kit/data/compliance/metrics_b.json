@@ -1,0 +1,48 @@
+{
+  "sample": "B 合规Guard",
+  "corpus": {
+    "md_files": 9,
+    "chunks": 9,
+    "acl_distribution": {
+      "internal": 3,
+      "public": 3,
+      "restricted": 3
+    },
+    "quality_accept_rate": 1.0
+  },
+  "acceptance": {
+    "AC1_越权拦截": "3/3",
+    "AC2_最小权限": "27/27",
+    "AC3_审计覆盖": "1 (31/31)",
+    "AC4_越权可溯": "3/3",
+    "AC5_管理员可用性": "9/9",
+    "AC6_自检": "1/1",
+    "AC7_无据拒答": "4/4"
+  },
+  "acl_selfcheck": {
+    "public": [
+      "public",
+      "public",
+      "public"
+    ],
+    "internal": [
+      "internal",
+      "internal",
+      "public",
+      "public",
+      "public",
+      "internal"
+    ],
+    "restricted": [
+      "internal",
+      "restricted",
+      "internal",
+      "restricted",
+      "restricted",
+      "public",
+      "public",
+      "public"
+    ]
+  },
+  "optional_real_glm_answer": "\n云启科技拟收购的标的公司是星海数据，交易对价为23.5亿元。 [4]"
+}

@@ -1,0 +1,27 @@
+# 知擎 RAG 框架 · 依赖清单（目标环境：conda env `rag-forge`，python 3.11，隔离安装）
+# 安装：conda activate rag-forge && pip install -r requirements.txt
+
+# --- 核心运行时（必装，轻量）---
+openai>=1.50
+pyyaml
+python-dotenv
+httpx
+qdrant-client
+fastapi
+uvicorn[standard]
+streamlit
+
+# ragas（可选，暂不装）: 当前 ragas 0.4.3 与 langchain-community 0.4.x 不兼容
+#   (import 路径 langchain_community.chat_models.vertexai 已被移除)，装了也 import 不了。
+#   本仓库 eval/evaluate.py 已自包含 Recall@k / 拒答准确率 / 近似 faithfulness，无需 ragas 即可出指标表。
+#   如需标准 RAGAS 指标，后续单独 pin 一个与 langchain 兼容的 ragas 版本再装。
+# ragas
+
+# --- 解析层（重，样例 A 进入真实 PDF 阶段再装）---
+# docling 会拉 torch；paddleocr/paddlepaddle 体积大。建议单独按需安装。
+# docling
+# paddleocr
+# paddlepaddle
+
+# --- 可选：若改用 sentence_transformers 而非 Ollama 跑 embedding（当前网络下 HF 被墙，不推荐）---
+# sentence-transformers

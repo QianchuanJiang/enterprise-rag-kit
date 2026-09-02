@@ -1,0 +1,40 @@
+tenant: tenant_b
+data_dir: ./data/compliance
+collection: kb_compliance
+
+parser:
+  engine: markdown
+
+retrieval:
+  sparse: true
+  rerank_enabled: false   # 本地无 reranker，降级为 RRF（真实生产可开 bge-reranker）
+  top_k_final: 8
+
+guard:
+  require_citation: true
+  # 拒答阈值：沿用跨行业语料标定 0.59（相关[0.605,0.746]/无关[0.449,0.576]，干净分离）
+  refuse_threshold: 0.59
+
+security:
+  acl_enabled: true          # 样例 B 开关：检索层硬拦截
+  default_level: public
+  audit_enabled: true
+  audit_path: ./data/compliance/audit.jsonl
+  # 配置映射演示：文档源(stem) -> 密级。预留与甲方 IAM/钉钉/企微角色对接点。
+  acl_map:
+    pub_云启科技_年报: public
+    int_云启科技_经营计划: internal
+    res_云启科技_并购预案: restricted
+    pub_远东智造_年报: public
+    int_远东智造_经营计划: internal
+    res_远东智造_并购预案: restricted
+    pub_康元生物_年报: public
+    int_康元生物_经营计划: internal
+    res_康元生物_并购预案: restricted
+
+llm:
+  provider: openai
+  base_url: https://open.bigmodel.cn/api/paas/v4
+  model: glm-4.6v-flash
+  api_key_env: ZHIPU_API_KEY
+  temperature: 0.1

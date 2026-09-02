@@ -1,0 +1,51 @@
+# 样例 A：异构文档知识库（年报 / 招股书问答）—— 底座
+# 真实部署配置：BGE-M3 向量 + BM25 + 重排 + 本地 Ollama 生成
+tenant: annual_report
+data_dir: ./data/annual_report
+collection: kb_ar
+qdrant_url: http://localhost:6333
+
+parser:
+  engine: docling          # 复杂版式优先 docling；失败自动降级 pymupdf
+  ocr: true
+  ocr_lang: ch
+  drop_header_footer: true
+  table_mode: kv_pairs     # 大表拆「属性-值对」，不做整表向量化
+  min_text_len: 30
+
+chunk:
+  strategy: parent_child
+  child_size: 128
+  parent_size: 768
+  overlap: 32
+  respect_headings: true
+
+retrieval:
+  dense_model: BAAI/bge-m3
+  dense_dim: 1024
+  sparse: true
+  top_k_coarse: 50
+  top_k_final: 8
+  rerank_enabled: true
+  rerank_model: BAAI/bge-reranker-v2-m3
+  query_rewrite: true
+
+guard:
+  require_citation: true
+  refuse_threshold: 0.35
+  max_context_chars: 12000
+  injection_check: true
+
+security:
+  acl_enabled: false
+  default_level: public
+  audit_enabled: true
+  audit_path: ./data/annual_report/audit.jsonl
+
+llm:
+  provider: ollama
+  base_url: http://localhost:11434/v1
+  model: qwen3:14b
+  api_key_env: LLM_API_KEY
+  temperature: 0.1
+  max_tokens: 2048

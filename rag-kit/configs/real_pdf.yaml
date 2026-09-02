@@ -1,0 +1,58 @@
+# 真实 PDF 路线配置 —— 样例 A「PDF -> PyMuPDF 抽取」生产链路
+# 与 real_reports.yaml 的唯一差别：语料是 data/reports/raw/ 下的「真实 PDF 文件」，
+# parser 对 .pdf 后缀走 _parse_pymupdf（PyMuPDF 抽取），其余检索/嵌入/生成/拒答完全一致。
+#
+# 生成真实 PDF：python scripts/make_real_pdfs.py  （当前环境用 PyMuPDF 把合成年报写成 PDF）
+# 获得真实年报 PDF 后：把文件丢进 data/reports/raw/ 覆盖同名 .pdf，重跑评测即可。
+# 评测：python scripts/real_pdf_eval.py
+
+tenant: real_pdf
+data_dir: ./data/reports/raw
+collection: kb_real_pdf
+qdrant_url: http://localhost:6333
+
+parser:
+  engine: pymupdf
+  drop_header_footer: true
+  table_mode: kv_pairs
+  min_text_len: 30
+
+chunk:
+  strategy: parent_child
+  child_size: 256
+  parent_size: 768
+  overlap: 32
+  respect_headings: true
+
+retrieval:
+  dense_model: BAAI/bge-m3
+  dense_dim: 1024
+  sparse: true
+  top_k_coarse: 30
+  top_k_final: 8
+  rerank_enabled: true
+  rerank_model: BAAI/bge-reranker-v2-m3
+  query_rewrite: false
+
+guard:
+  require_citation: true
+  # 拒答阈值（真实 PDF 路线数据标定）：相关分区间 [0.656,0.818] / 无关 [0.365,0.577]，
+  # 干净分离；PDF 抽取文本比 .md 更干净，分离度更好，标定 0.62（比 .md 路线 0.59 略高）。
+  # 注：若换成「真实下载的年报 PDF」，需在该语料上再标定一次。
+  refuse_threshold: 0.62
+  max_context_chars: 12000
+  injection_check: true
+
+security:
+  acl_enabled: false
+  default_level: public
+  audit_enabled: true
+  audit_path: ./data/reports/raw/audit.jsonl
+
+llm:
+  provider: openai
+  base_url: https://open.bigmodel.cn/api/paas/v4
+  model: glm-4.6v-flash
+  api_key_env: ZHIPU_API_KEY
+  temperature: 0.1
+  max_tokens: 1024

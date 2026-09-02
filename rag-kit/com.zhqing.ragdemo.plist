@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.zhqing.ragdemo</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/dagongjidecuoyiban/anaconda3/envs/rag-forge/bin/python</string>
+    <string>/Users/dagongjidecuoyiban/Desktop/workBuddy/2026-08-31-15-37-21/rag-freelance-kit/rag-kit/web_demo.py</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/dagongjidecuoyiban/Desktop/workBuddy/2026-08-31-15-37-21/rag-freelance-kit/rag-kit</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PORT</key>
+    <string>8080</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/tmp/ragdemo.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/ragdemo.err.log</string>
+</dict>
+</plist>

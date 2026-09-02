@@ -1,0 +1,47 @@
+# 零下载演示配置：fake 向量 + stub 生成器，无需 GPU / 模型下载即可端到端跑通。
+# 真实交付时，把 retrieval.dense_model / llm.provider 改成真实模型即可（见 tenant_a.yaml）。
+tenant: demo
+data_dir: ./data/demo
+collection: kb_demo
+qdrant_url: http://localhost:6333
+
+parser:
+  engine: pymupdf
+  ocr: false
+  drop_header_footer: true
+  table_mode: kv_pairs
+  min_text_len: 20
+
+chunk:
+  strategy: parent_child
+  child_size: 128
+  parent_size: 768
+  overlap: 32
+  respect_headings: true
+
+retrieval:
+  dense_model: fake
+  dense_dim: 256
+  sparse: true
+  top_k_coarse: 20
+  top_k_final: 5
+  rerank_enabled: false
+  query_rewrite: false
+
+guard:
+  require_citation: false
+  refuse_threshold: 0.0
+  max_context_chars: 4000
+  injection_check: true
+
+security:
+  acl_enabled: false
+  default_level: public
+  audit_enabled: true
+  audit_path: ./data/demo/audit.jsonl
+
+llm:
+  provider: stub
+  model: stub
+  temperature: 0.1
+  max_tokens: 1024

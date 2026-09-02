@@ -1,0 +1,18 @@
+# 密钥（含 API key，永不提交）
+.env
+.env.*
+
+# Python 运行时
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# 运行时数据（向量库、审计日志、真实抓取语料等）
+data/dev/
+data/offline/
+data/default/
+
+# 系统
+.DS_Store

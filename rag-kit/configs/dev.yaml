@@ -1,0 +1,58 @@
+# ============================================================
+# 开发期配置：智谱 GLM-4.6V-Flash 多模态免费档（LLM） + 本地 BGE-M3（Embedding）
+# 目标：零成本跑通底座、产出真实可复现指标。
+# 切换供应商只改本文件 + 环境变量，不动业务代码。
+# ============================================================
+
+tenant: dev
+data_dir: ./data/dev
+collection: kb_dev
+qdrant_url: http://localhost:6333
+
+parser:
+  engine: docling          # docling | pymupdf
+  ocr: true                # 扫描件走 OCR
+  drop_header_footer: true # 去页眉页脚/目录页码
+  table_mode: kv_pairs     # 跨页表拆成 属性-值对
+
+chunk:
+  strategy: parent_child   # 父子 chunk：子用于精确定位，父给 LLM 完整上下文
+
+retrieval:
+  dense_model: BAAI/bge-m3
+  dense_dim: 1024
+  sparse: true             # BM25 关键词路（型号/代号/人名召回关键）
+  top_k_coarse: 50
+  top_k_final: 8
+  rerank_enabled: true
+  rerank_model: BAAI/bge-reranker-v2-m3
+  query_rewrite: true
+
+guard:
+  require_citation: true   # 强制溯源（每个结论带来源）
+  refuse_threshold: 0.35   # 最高检索分低于此值即拒答
+  max_context_chars: 12000
+  injection_check: true    # Prompt 注入检测
+
+security:
+  acl_enabled: false       # 样例 A 先关闭；样例 B 开启
+  default_level: public
+  audit_enabled: true
+  audit_path: ./data/dev/audit.jsonl
+
+llm:
+  provider: openai         # 智谱 GLM-4.6V-Flash 多模态，走 OpenAI 兼容接口
+  base_url: https://open.bigmodel.cn/api/paas/v4
+  model: glm-4.6v-flash    # 多模态(文本/图像/PDF)，开发期免费档；纯文本生成亦可用 glm-4.7-flash 降本
+  api_key_env: ZHIPU_API_KEY   # 密钥放环境变量，绝不硬编码进仓库
+  temperature: 0.1
+  max_tokens: 2048
+
+# ------------------------------------------------------------
+# Embedder 模式切换（环境变量 RAG_EMBEDDER，无需改代码）：
+#   ollama  -> 本地 Ollama BGE-M3（默认；需先 `ollama pull bge-m3`）
+#   cloud   -> 云端免费档：另设 EMBED_BASE_URL / EMBED_MODEL / EMBED_API_KEY
+#              · 智谱 embedding-3：EMBED_BASE_URL=https://open.bigmodel.cn/api/paas/v4  EMBED_MODEL=embedding-3
+#              · 硅基流动 bge-m3：EMBED_BASE_URL=https://api.siliconflow.cn/v1        EMBED_MODEL=BAAI/bge-m3
+#   fake    -> 零依赖冒烟测试（不可用于生产评测）
+# ------------------------------------------------------------
