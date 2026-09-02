@@ -66,4 +66,4 @@ ans = resp.choices[0].message.content or ""
 print(f"\n[response] {ans}\n")
 print("✅ 真实模型调用成功：dev.yaml 的 LLM 配置可端到端跑通。")
 print("   注：GLM-4.6V-Flash 为原生多模态模型，亦可直接接收 image / pdf 输入，")
-print("       适用于样例 A 的「扫描件/复杂版式」文档理解（无需先 OCR 再解析）。")
+print("       适用于场景 A 的「扫描件/复杂版式」文档理解（无需先 OCR 再解析）。")

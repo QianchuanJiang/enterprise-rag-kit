@@ -1,4 +1,4 @@
-# 样例 C · 信创Edge —— Qdrant 生产向量库一键起
+# 场景 C · 信创Edge —— Qdrant 生产向量库一键起
 # 数据落在 docker 卷 qdrant_storage，容器重启/重建不丢（持久化演示）。
 services:
   qdrant:

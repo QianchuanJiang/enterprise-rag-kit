@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""知擎 RAG 框架 · 样例 B 权限审计指标（合规 Guard）。
+"""知擎 RAG 框架 · 场景 B 权限审计指标（合规 Guard）。
 
 特点：
 - 真实 BGE-M3 嵌入（Ollama 本地），检索/ACL/审计全部真实跑出，可复现。
@@ -82,7 +82,7 @@ LEVELS = ["public", "internal", "restricted"]
 
 
 def main() -> int:
-    print("=== 知擎 RAG 框架 · 样例 B 权限审计指标（合规 Guard）===\n")
+    print("=== 知擎 RAG 框架 · 场景 B 权限审计指标（合规 Guard）===\n")
     cfg = load_config(str(CONFIG))
     kb = KnowledgeBase(cfg, backend="memory")
 
@@ -158,7 +158,7 @@ def main() -> int:
     sc_public = sc.get("public", [])
     ac6_ok = 1 if (len(sc_restricted) > 0 and "restricted" not in sc_public) else 0
 
-    print("=== 验收结果（样例 B · 真实 BGE-M3 嵌入）===")
+    print("=== 验收结果（场景 B · 真实 BGE-M3 嵌入）===")
     print(f"  AC-1 越权拦截（受限问题·员工视角 0 受限命中） : {ac1_ok}/{ac1_n}")
     print(f"  AC-2 最小权限（返回密级全部 <= 用户级别）    : {ac2_ok}/{ac2_n}")
     print(f"  AC-3 审计覆盖（审计条数 == 查询数）          : {ac3_ok}  ({len(audit_lines)}/{total_asks})")

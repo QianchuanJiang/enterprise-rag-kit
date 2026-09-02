@@ -1,14 +1,14 @@
-# 样例 C · 知擎·信创Edge（离线私有化）—— Qdrant 生产后端
+# 场景 C · 知擎·信创Edge（离线私有化）—— Qdrant 生产后端
 
-## 1. 这个样例解决什么
-把样例 A/B 的「内存向量库」升级为**生产级向量数据库 Qdrant**：
+## 1. 这个场景解决什么
+把场景 A/B 的「内存向量库」升级为**生产级向量数据库 Qdrant**：
 - **持久化**：向量与原文落盘，进程退出 / 服务重启不丢（内存后端反之）。
 - **横向扩展**：百万级向量、横向扩容，内存后端百级尚可、千级变慢。
 - **payload 权限过滤**：`acl_level` 随向量入库，开启 ACL 时受限片段在检索层就被 Qdrant 过滤掉，根本不返回（与检索层 `can_access` 双保险）。
 - 上游解析/切片/质检/嵌入、下游生成**完全不动**——这正是底座抽象的价值。
 
-## 2. 与样例 A 的唯一差别
-| 层 | 样例 A（内存） | 样例 C（Qdrant） |
+## 2. 与场景 A 的唯一差别
+| 层 | 场景 A（内存） | 场景 C（Qdrant） |
 |----|---------------|------------------|
 | 向量存储 | 进程内 Python 列表 | Qdrant 服务（localhost:6333） |
 | 运行时切换 | `KnowledgeBase(cfg, backend="memory")` | `KnowledgeBase(cfg, backend="qdrant")` |
@@ -33,7 +33,7 @@ docker run -d --name qdrant -p 6333:6333 -v qdrant_storage:/qdrant/storage qdran
 curl -s http://localhost:6333/ | head -c 80   # 健康检查，返回 qdrant 版本即 OK
 ```
 
-## 4. 代码改动清单（本次样例 C 落地）
+## 4. 代码改动清单（本次场景 C 落地）
 `src/retriever.py`：
 - 给 `Retriever.__init__` 增加显式 `collection` 参数（原先错用 `self.cfg.collection`，而 `RetrievalConfig` 无该字段，桩代码必崩）。
 - `_upsert_qdrant`：用 `query_points`（qdrant-client 1.19 已废弃 `search`）+ `PointStruct`；按 chunk 在 `self.chunks` 中的索引作为稳定 point id；首次入库自动 `create_collection`（1024 维 / 余弦距离）。
@@ -53,7 +53,7 @@ cd rag-kit
 **验证持久化（Qdrant 向量点数量 + 抽样 payload.acl_level）→ 模拟重启（新建空 KB 仅 `load()` 再检索）**。
 
 ## 6. 实测指标（8 份真实 PDF · 45→8 chunks · 真实 BGE-M3 + GLM）
-| 指标 | 样例 A（内存/PDF） | 样例 C（Qdrant） |
+| 指标 | 场景 A（内存/PDF） | 场景 C（Qdrant） |
 |------|-------------------|------------------|
 | 入库 chunks / 质检 | 8 / 1.0 | 8 / 1.0 |
 | Recall@1 / @3 / **@5** / @8 | 75% / 90% / 100% / 100% | 75% / 90% / 100% / 100% |

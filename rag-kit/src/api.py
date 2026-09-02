@@ -6,7 +6,7 @@
 - GET  /audit   管理员查审计日志（仅示例，生产需鉴权）
 - GET  /health  健康检查
 
-样例 C 离线部署时，这条服务与 Qdrant / Ollama 一起由 docker-compose 拉起。
+场景 C 离线部署时，这条服务与 Qdrant / Ollama 一起由 docker-compose 拉起。
 """
 
 from __future__ import annotations

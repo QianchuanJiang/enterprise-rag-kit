@@ -1,4 +1,4 @@
-# 真实 PDF 路线配置 —— 样例 A「PDF -> PyMuPDF 抽取」生产链路
+# 真实 PDF 路线配置 —— 场景 A「PDF -> PyMuPDF 抽取」生产链路
 # 与 real_reports.yaml 的唯一差别：语料是 data/reports/raw/ 下的「真实 PDF 文件」，
 # parser 对 .pdf 后缀走 _parse_pymupdf（PyMuPDF 抽取），其余检索/嵌入/生成/拒答完全一致。
 #

@@ -65,7 +65,7 @@ class GuardConfig:
 
 @dataclass
 class SecurityConfig:
-    """权限与审计。这是样例 B 的核心，也是相对平台竞争者的护城河。"""
+    """权限与审计。这是场景 B 的核心，也是相对平台竞争者的护城河。"""
 
     acl_enabled: bool = False
     default_level: str = "public"  # public | internal | restricted

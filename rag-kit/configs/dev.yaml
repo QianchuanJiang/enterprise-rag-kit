@@ -35,7 +35,7 @@ guard:
   injection_check: true    # Prompt 注入检测
 
 security:
-  acl_enabled: false       # 样例 A 先关闭；样例 B 开启
+  acl_enabled: false       # 场景 A 先关闭；场景 B 开启
   default_level: public
   audit_enabled: true
   audit_path: ./data/dev/audit.jsonl

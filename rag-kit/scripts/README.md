@@ -7,7 +7,7 @@ cd rag-kit
 python scripts/smoke_test.py
 ```
 
-- 语料：`data/smoke/*.md`（合成样例，仅验证管线，非真实年报）
+- 语料：`data/smoke/*.md`（合成场景，仅验证管线，非真实年报）
 - 配置：`configs/smoke.yaml`（fake 向量 + stub 生成 + memory 后端）
 - 验证项：入库 → 质检 → 检索 → 生成 → 溯源 → 无据拒答 → 审计链
 - 退出码：全过 0 / 有失败 1（可直接接 CI）

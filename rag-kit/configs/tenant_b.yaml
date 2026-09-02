@@ -16,7 +16,7 @@ guard:
   refuse_threshold: 0.59
 
 security:
-  acl_enabled: true          # 样例 B 开关：检索层硬拦截
+  acl_enabled: true          # 场景 B 开关：检索层硬拦截
   default_level: public
   audit_enabled: true
   audit_path: ./data/compliance/audit.jsonl

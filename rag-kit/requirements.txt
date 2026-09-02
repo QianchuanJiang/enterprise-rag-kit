@@ -17,7 +17,7 @@ streamlit
 #   如需标准 RAGAS 指标，后续单独 pin 一个与 langchain 兼容的 ragas 版本再装。
 # ragas
 
-# --- 解析层（重，样例 A 进入真实 PDF 阶段再装）---
+# --- 解析层（重，场景 A 进入真实 PDF 阶段再装）---
 # docling 会拉 torch；paddleocr/paddlepaddle 体积大。建议单独按需安装。
 # docling
 # paddleocr

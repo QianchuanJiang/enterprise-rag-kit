@@ -1,4 +1,4 @@
-# 样例 A：异构文档知识库（年报 / 招股书问答）—— 底座
+# 场景 A：异构文档知识库（年报 / 招股书问答）—— 底座
 # 真实部署配置：BGE-M3 向量 + BM25 + 重排 + 本地 Ollama 生成
 tenant: annual_report
 data_dir: ./data/annual_report
