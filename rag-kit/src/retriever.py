@@ -141,7 +141,7 @@ class Retriever:
 
         ranked = sorted(fused.keys(), key=lambda i: fused[i], reverse=True)
 
-        # 4) ACL 硬过滤（权限合规 核心优势：检索层就拦截，不是生成后过滤）
+        # 4) ACL 硬过滤（权限合规关键能力：检索层就拦截，不是生成后过滤）
         if self.security and self.security.acl_enabled:
             ranked = [
                 i

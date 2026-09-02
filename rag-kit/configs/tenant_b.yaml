@@ -20,7 +20,7 @@ security:
   default_level: public
   audit_enabled: true
   audit_path: ./data/compliance/audit.jsonl
-  # 配置映射演示：文档源(stem) -> 密级。预留与客户方 IAM/钉钉/企微角色对接点。
+  # 配置映射演示：文档源(stem) -> 密级。预留与企业 IAM/钉钉/企微角色对接点。
   acl_map:
     pub_云启科技_年报: public
     int_云启科技_经营计划: internal
