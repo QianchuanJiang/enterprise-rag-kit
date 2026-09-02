@@ -4,10 +4,10 @@
 新增客户只改 config/tenants/*.yaml，不改代码——这是边际交付时间从 60h 压到 20h 的前提。
 
 场景映射：
-- 场景 A（异构解析）：默认配置即可
-- 场景 B（权限审计）：security.acl_enabled=true，ingest 时给 chunk 打 acl_level
-- 场景 C（离线私有化）：backend=memory 或 qdrant，配合 docker-compose 一键起
-- 场景 D（分层调度）：接 Router，按路由结果切不同 llm.model
+- 文档解析（异构解析）：默认配置即可
+- 权限合规（权限审计）：security.acl_enabled=true，ingest 时给 chunk 打 acl_level
+- Qdrant 生产后端（离线私有化）：backend=memory 或 qdrant，配合 docker-compose 一键起
+- 分层调度（分层调度）：接 Router，按路由结果切不同 llm.model
 """
 
 from __future__ import annotations
@@ -54,7 +54,7 @@ class KnowledgeBase:
             report = qr
             acl_map = self.cfg.security.acl_map or {}
             for c in qr.accepted:
-                # 场景 B：入库即按「配置映射」给 chunk 打密级（预留 IAM 对接点）。
+                # 权限合规：入库即按「配置映射」给 chunk 打密级（预留 IAM 对接点）。
                 # 优先级：chunk 自带 > acl_map(按 source stem) > 租户默认级。
                 src = c.meta.get("source", "")
                 stem = Path(src).stem if src else ""
@@ -87,7 +87,7 @@ class KnowledgeBase:
             priv = self.retriever.search(question, user_level="restricted", return_scores=True)
             denied = len(priv) > len(scored)
 
-        # 无召回，或最高检索分低于阈值 -> 拒答（场景 A/B 的「无据拒答」铁律）
+        # 无召回，或最高检索分低于阈值 -> 拒答（文档解析与权限合规 的「无据拒答」铁律）
         # fake 向量下分数量纲不可比，仅按「空召回」拒答，避免误杀；
         # 真实嵌入（BGE-M3 等）下启用分数阈值，确保资料无依据时拒答。
         fake_mode = self.embedder.mode == "fake"
@@ -116,7 +116,7 @@ class KnowledgeBase:
             )
         return ans, contexts
 
-    # ---------- 从生产后端恢复（场景 C 持久化） ----------
+    # ---------- 从生产后端恢复（Qdrant 生产后端 持久化） ----------
     def load(self) -> "KnowledgeBase":
         """从 Qdrant 回灌已入库的向量与原文，无需重新入库即可检索。
 

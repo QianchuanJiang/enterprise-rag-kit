@@ -1,14 +1,14 @@
-# 场景 C · 知擎·信创Edge（离线私有化）—— Qdrant 生产后端
+# Qdrant 生产后端 · 知擎·信创Edge（离线私有化）—— Qdrant 生产后端
 
 ## 1. 这个场景解决什么
-把场景 A/B 的「内存向量库」升级为**生产级向量数据库 Qdrant**：
+把文档解析与权限合规 的「内存向量库」升级为**生产级向量数据库 Qdrant**：
 - **持久化**：向量与原文落盘，进程退出 / 服务重启不丢（内存后端反之）。
 - **横向扩展**：百万级向量、横向扩容，内存后端百级尚可、千级变慢。
 - **payload 权限过滤**：`acl_level` 随向量入库，开启 ACL 时受限片段在检索层就被 Qdrant 过滤掉，根本不返回（与检索层 `can_access` 双保险）。
 - 上游解析/切片/质检/嵌入、下游生成**完全不动**——这正是底座抽象的价值。
 
-## 2. 与场景 A 的唯一差别
-| 层 | 场景 A（内存） | 场景 C（Qdrant） |
+## 2. 与文档解析 的唯一差别
+| 层 | 文档解析（内存） | Qdrant 生产后端（Qdrant） |
 |----|---------------|------------------|
 | 向量存储 | 进程内 Python 列表 | Qdrant 服务（localhost:6333） |
 | 运行时切换 | `KnowledgeBase(cfg, backend="memory")` | `KnowledgeBase(cfg, backend="qdrant")` |
@@ -33,7 +33,7 @@ docker run -d --name qdrant -p 6333:6333 -v qdrant_storage:/qdrant/storage qdran
 curl -s http://localhost:6333/ | head -c 80   # 健康检查，返回 qdrant 版本即 OK
 ```
 
-## 4. 代码改动清单（本次场景 C 落地）
+## 4. 代码改动清单（本次Qdrant 生产后端 落地）
 `src/retriever.py`：
 - 给 `Retriever.__init__` 增加显式 `collection` 参数（原先错用 `self.cfg.collection`，而 `RetrievalConfig` 无该字段，桩代码必崩）。
 - `_upsert_qdrant`：用 `query_points`（qdrant-client 1.19 已废弃 `search`）+ `PointStruct`；按 chunk 在 `self.chunks` 中的索引作为稳定 point id；首次入库自动 `create_collection`（1024 维 / 余弦距离）。
@@ -53,7 +53,7 @@ cd rag-kit
 **验证持久化（Qdrant 向量点数量 + 抽样 payload.acl_level）→ 模拟重启（新建空 KB 仅 `load()` 再检索）**。
 
 ## 6. 实测指标（8 份真实 PDF · 45→8 chunks · 真实 BGE-M3 + GLM）
-| 指标 | 场景 A（内存/PDF） | 场景 C（Qdrant） |
+| 指标 | 文档解析（内存/PDF） | Qdrant 生产后端（Qdrant） |
 |------|-------------------|------------------|
 | 入库 chunks / 质检 | 8 / 1.0 | 8 / 1.0 |
 | Recall@1 / @3 / **@5** / @8 | 75% / 90% / 100% / 100% | 75% / 90% / 100% / 100% |
@@ -71,5 +71,5 @@ cd rag-kit
 3. 真实语料上**重新标定一次** `refuse_threshold`（配置在 `configs/tenant_c.yaml`）。
 4. 若客户要求离线纯内网：用 `ollama` 本地对话模型替换智谱 `llm`，把 `qdrant_url` 指向内网服务即可——数据全程不出域。
 
-## 8. 面试话术
+## 8. 要点总结
 > “框架同时支持内存后端（零依赖、可演示）与 Qdrant 生产后端（持久化、payload 权限过滤、横向扩展），按客户算力与合规要求切换。本次把向量库从内存切到 Qdrant 后，检索/生成指标逐位一致，且验证了持久化（重启免入库即可检索）与 payload 级权限过滤——这正是政企‘数据不出域’私有化交付的标准形态。”

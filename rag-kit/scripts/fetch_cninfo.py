@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""从巨潮网(cninfo)下载公开年报 PDF —— 场景 A 的真实语料来源。
+"""从巨潮网(cninfo)下载公开年报 PDF —— 文档解析 的真实语料来源。
 
 特点：
 - 使用 cninfo 公开 API，无需登录 / 付费 / 验证码

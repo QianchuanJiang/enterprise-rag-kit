@@ -1,4 +1,4 @@
-# 场景 C「信创Edge · 离线私有化」配置 —— Qdrant 生产后端
+# Qdrant 生产后端「信创Edge · 离线私有化」配置 —— Qdrant 生产后端
 # 与 real_pdf.yaml 的唯一差别：collection 独立命名；运行时由
 #   KnowledgeBase(cfg, backend="qdrant")
 # 切换为 Qdrant 生产向量库（持久化、payload 权限过滤、横向扩展）。

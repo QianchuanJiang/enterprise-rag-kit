@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""知擎 RAG 控制台 · 单文件零依赖演示服务（场景 A/B/C 统一入口）。
+"""知擎 RAG 控制台 · 单文件零依赖演示服务（文档解析、权限合规与 Qdrant 生产后端 统一入口）。
 
 功能：
   1. 流式问答（SSE）：逐字输出 + 检索透视（分数/耗时/拒答判定/溯源）。
   2. 向量空间投影：把 1024 维 chunk 向量做 PCA 降维成 2D，query 作为星标叠放。
   3. 溯源闭环：点答案里的 [n] 直接打开真实 PDF 对应页并高亮命中片段。
   4. 阈值实时滑块：拖动改变拒答阈值，看召回/拒答如何变化。
-  5. 后端切换：Qdrant 生产 / 内存；角色切换：公开/员工/管理员（场景 B 权限双身份）。
+  5. 后端切换：Qdrant 生产 / 内存；角色切换：公开/员工/管理员（权限合规 权限双身份）。
   6. 直播评测台：一键跑 10 题测试集，实时读出 Recall/拒答/生成指标。
 
 运行：
   cd rag-kit
-  docker run -d -p 6333:6333 qdrant/qdrant   # 场景 C 需要
+  docker run -d -p 6333:6333 qdrant/qdrant   # Qdrant 生产后端 需要
   /path/to/rag-forge/bin/python web_demo.py
   浏览器打开 http://localhost:8080
 """
@@ -89,7 +89,7 @@ def build_kb(kind: str) -> KnowledgeBase:
         kb = KnowledgeBase(cfg, backend="memory")
         kb.ingest(_files())
     elif kind == "acl":
-        # 场景 B 权限双身份：把两家公司标为受限，演示员工被拦/管理员可见
+        # 权限合规 权限双身份：把两家公司标为受限，演示员工被拦/管理员可见
         cfg.security.acl_enabled = True
         cfg.security.acl_map = {"贵州茅台": "restricted", "宁德时代": "restricted"}
         kb = KnowledgeBase(cfg, backend="memory")

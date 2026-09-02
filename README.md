@@ -46,9 +46,9 @@
 
 ## 三个落地场景
 
-- **场景一 · 真实 PDF 解析**：端到端 PDF → 抽取 → 检索链路，验证解析质量对召回的影响。见 [docs/case-pdf-parsing.md](docs/case-pdf-parsing.md)
-- **场景二 · 权限合规**：员工 / 管理员双身份，受限内容（如未公开交易对价）对低权限用户透明拦截。见 [docs/case-access-control.md](docs/case-access-control.md)
-- **场景三 · Qdrant 生产后端**：向量库从内存切换为 Qdrant，验证持久化与重启免重入库。见 [docs/case-qdrant-backend.md](docs/case-qdrant-backend.md)
+- **文档解析（真实 PDF 链路）**：端到端 PDF → 抽取 → 检索链路，验证解析质量对召回的影响。见 [docs/case-pdf-parsing.md](docs/case-pdf-parsing.md)
+- **权限合规（检索层 ACL）**：员工 / 管理员双身份，受限内容（如未公开交易对价）对低权限用户透明拦截。见 [docs/case-access-control.md](docs/case-access-control.md)
+- **Qdrant 生产后端（持久化与私有化）**：向量库从内存切换为 Qdrant，验证持久化与重启免重入库。见 [docs/case-qdrant-backend.md](docs/case-qdrant-backend.md)
 
 ## 快速开始
 

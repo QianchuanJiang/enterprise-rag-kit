@@ -141,7 +141,7 @@ class Retriever:
 
         ranked = sorted(fused.keys(), key=lambda i: fused[i], reverse=True)
 
-        # 4) ACL 硬过滤（场景 B 护城河：检索层就拦截，不是生成后过滤）
+        # 4) ACL 硬过滤（权限合规 核心优势：检索层就拦截，不是生成后过滤）
         if self.security and self.security.acl_enabled:
             ranked = [
                 i
@@ -250,7 +250,7 @@ class Retriever:
         if self._qdrant is None:
             self._qdrant = QdrantClient(url=self.qdrant_url)
         # 仅当 ACL 开启时才把权限下沉为 Qdrant payload 过滤；
-        # 否则不过滤（与内存后端行为一致，保证场景 C 无 ACL 场景检索完整）。
+        # 否则不过滤（与内存后端行为一致，保证Qdrant 生产后端 无 ACL 场景检索完整）。
         acl_on = bool(self.security and self.security.acl_enabled)
         qfilter = None
         if acl_on:
@@ -290,7 +290,7 @@ class Retriever:
     def load_from_qdrant(self) -> None:
         """从 Qdrant 回灌 chunk 文本与载荷到内存（BM25 + 索引）。
 
-        场景 C（信创/离线私有化）的核心价值：服务重启后，向量与原文仍在
+        Qdrant 生产后端（信创/离线私有化）的核心价值：服务重启后，向量与原文仍在
         Qdrant 中，无需重新解析/切片/入库即可检索。本方法在启动时把
         payload 重建为 Chunk，使检索层（稠密+BM25+ACL）立即可用。
         """

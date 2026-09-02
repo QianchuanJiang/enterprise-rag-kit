@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""知擎 RAG 框架 · 扩量真实指标（场景 A · 8 家跨行业语料）。
+"""知擎 RAG 框架 · 扩量真实指标（文档解析 · 8 家跨行业语料）。
 
 与 real_run.py 的区别：
 - 语料从 2 份扩到 8 家跨行业（银行/白酒/保险/电池/家电/医药），更贴近真实交付。
@@ -113,7 +113,7 @@ GEN_QUERIES = [
 
 
 def main() -> int:
-    print("=== 知擎 RAG 框架 · 扩量真实指标（场景 A · 8 家跨行业）===\n")
+    print("=== 知擎 RAG 框架 · 扩量真实指标（文档解析 · 8 家跨行业）===\n")
     cfg = load_config(str(CONFIG))
     kb = KnowledgeBase(cfg, backend="memory")
 
@@ -220,7 +220,7 @@ def main() -> int:
     }
     METRICS_OUT.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print("=== 指标汇总（场景 A · 扩量真实链路）===")
+    print("=== 指标汇总（文档解析 · 扩量真实链路）===")
     print(f"  入库 companies/chunks : {len(_files(REPORT_DIR))} / {n}")
     print(f"  Recall@1/@3/@5/@8    : "
           f"{recalls[1]*100:.0f}% / {recalls[3]*100:.0f}% / {recalls[5]*100:.0f}% / {recalls[8]*100:.0f}%")

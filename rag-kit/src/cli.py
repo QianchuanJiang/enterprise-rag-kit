@@ -8,7 +8,7 @@
   python cli.py run --config configs/tenant_a.yaml --dir data/sample \\
         --question "2024 年公司营业收入是多少？"
 
-  # 带权限级别的提问（场景 B）
+  # 带权限级别的提问（权限合规）
   python cli.py run --config configs/tenant_b.yaml --dir data/sample \\
         --question "受限条款的具体内容？" --user-level public
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""知擎 RAG 框架 · 真实链路第一批指标（场景 A）。
+"""知擎 RAG 框架 · 真实链路第一批指标（文档解析）。
 
 与 smoke_test.py 的区别：这里用真实模型，产出可复现的真实指标。
 - 嵌入：本地 Ollama BGE-M3（1024 维，零成本）
@@ -63,7 +63,7 @@ def recall_at_k(retrieved_per_q: list[list[str]], gold: list[str], k: int) -> fl
 
 
 def main() -> int:
-    print("=== 知擎 RAG 框架 · 真实链路第一批指标（场景 A）===\n")
+    print("=== 知擎 RAG 框架 · 真实链路第一批指标（文档解析）===\n")
     cfg = load_config(str(CONFIG))
     kb = KnowledgeBase(cfg, backend="memory")
 
@@ -130,7 +130,7 @@ def main() -> int:
     print(f"=== 拒答测试 ===\n  无依据问题拒答: {'OK' if refused_ok else 'FAIL'}  (reason={ans_empty.reason})\n")
 
     # 5) 汇总
-    print("=== 指标汇总（场景 A · 真实链路基线）===")
+    print("=== 指标汇总（文档解析 · 真实链路基线）===")
     print(f"  入库 chunks          : {n}")
     print(f"  Recall@1 / @3 / @5   : "
           f"{recall_at_k(retrieved_texts, [g for _,g in gold_set], 1)*100:.0f}% / "

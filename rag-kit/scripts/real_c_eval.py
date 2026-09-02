@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""知擎 RAG 框架 · 场景 C「信创Edge · 离线私有化」—— Qdrant 生产后端评测。
+"""知擎 RAG 框架 · Qdrant 生产后端「信创Edge · 离线私有化」—— Qdrant 生产后端评测。
 
 与 real_pdf_eval.py 的唯一差别：向量库从「内存」切换为「Qdrant 生产后端」。
 - 解析/嵌入(BGE-M3)/检索(BM25+RRF)/生成(GLM)/拒答阈值 完全一致，指标应可横向对比。
-- 额外验证场景 C 的两条核心价值：
+- 额外验证Qdrant 生产后端 的两条核心价值：
     (1) 持久化：向量与原文落在 Qdrant（数据库是事实源），非进程内存；
     (2) 重启免入库：新建 KB 仅从 Qdrant 回灌即可检索（服务重启/横向扩容场景）。
-- ACL payload 过滤：本配置 acl_enabled=false 时不过滤；场景 B 开启 ACL 时自动下沉为
+- ACL payload 过滤：本配置 acl_enabled=false 时不过滤；权限合规 开启 ACL 时自动下沉为
       Qdrant payload 条件检索（受限片段根本不返回服务端），与检索层 can_access 双保险。
 
 先决：
@@ -111,7 +111,7 @@ GEN_QUERIES = [
 
 
 def main() -> int:
-    print("=== 知擎 RAG 框架 · 场景 C「信创Edge」Qdrant 生产后端评测 ===\n")
+    print("=== 知擎 RAG 框架 · Qdrant 生产后端「信创Edge」Qdrant 生产后端评测 ===\n")
     cfg = load_config(str(CONFIG))
 
     # --- 连通性预检 ---
@@ -216,8 +216,8 @@ def main() -> int:
     print(f"=== 拒答测试（无关 query）===")
     print(f"  无依据拒答通过: {refused_ok}/{len(IRRELEVANT)}\n")
 
-    # ===== 场景 C 专属：持久化 + 重启免入库 =====
-    print("=== 场景 C 核心价值验证：持久化 & 重启免入库 ===")
+    # ===== Qdrant 生产后端 专属：持久化 + 重启免入库 =====
+    print("=== Qdrant 生产后端 核心价值验证：持久化 & 重启免入库 ===")
     info = qc.get_collection(cfg.collection)
     points_count = getattr(info, "points_count", None)
     print(f"  Qdrant collection={cfg.collection}  向量点数量={points_count}")
@@ -252,7 +252,7 @@ def main() -> int:
     }
     METRICS_OUT.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print("=== 指标汇总（场景 C · Qdrant 生产后端）===")
+    print("=== 指标汇总（Qdrant 生产后端 · Qdrant 生产后端）===")
     print(f"  入库 pdf/chunks      : {len(_files(REPORT_DIR))} / {n}")
     print(f"  Qdrant 向量点         : {points_count}")
     print(f"  Recall@1/@3/@5/@8    : "

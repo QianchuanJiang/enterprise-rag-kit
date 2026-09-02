@@ -16,11 +16,11 @@ guard:
   refuse_threshold: 0.59
 
 security:
-  acl_enabled: true          # 场景 B 开关：检索层硬拦截
+  acl_enabled: true          # 权限合规 开关：检索层硬拦截
   default_level: public
   audit_enabled: true
   audit_path: ./data/compliance/audit.jsonl
-  # 配置映射演示：文档源(stem) -> 密级。预留与甲方 IAM/钉钉/企微角色对接点。
+  # 配置映射演示：文档源(stem) -> 密级。预留与客户方 IAM/钉钉/企微角色对接点。
   acl_map:
     pub_云启科技_年报: public
     int_云启科技_经营计划: internal

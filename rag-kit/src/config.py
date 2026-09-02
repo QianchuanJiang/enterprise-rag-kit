@@ -65,13 +65,13 @@ class GuardConfig:
 
 @dataclass
 class SecurityConfig:
-    """权限与审计。这是场景 B 的核心，也是相对平台竞争者的护城河。"""
+    """权限与审计。这是权限合规 的核心，也是相对平台同类方案的核心优势。"""
 
     acl_enabled: bool = False
     default_level: str = "public"  # public | internal | restricted
     audit_enabled: bool = True
     audit_path: str = "./data/{tenant}/audit.jsonl"
-    # 配置映射演示用：文档源(stem) -> 密级。预留与甲方 IAM/钉钉/企微角色对接点。
+    # 配置映射演示用：文档源(stem) -> 密级。预留与客户方 IAM/钉钉/企微角色对接点。
     acl_map: dict = field(default_factory=dict)
 
 
